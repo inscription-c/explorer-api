@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcwallet/netparams"
 	"github.com/inscription-c/cins/btcd/rpcclient"
+	"github.com/inscription-c/cins/pkg/util"
 	"github.com/inscription-c/explorer-api/config"
 	"github.com/inscription-c/explorer-api/dao"
 	"github.com/inscription-c/explorer-api/handle"
@@ -40,6 +42,9 @@ func main() {
 func ExplorerApi() error {
 	if err := config.Init(configFilePath); err != nil {
 		return err
+	}
+	if config.Cfg.Server.Testnet {
+		util.ActiveNet = &netparams.TestNet3Params
 	}
 
 	logDir := filepath.Join(config.Cfg.Server.Name, "explorer.log")

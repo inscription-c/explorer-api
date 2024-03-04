@@ -1,6 +1,10 @@
 package constants
 
-import "sync"
+import (
+	"github.com/gogf/gf/v2/util/gconv"
+	"sort"
+	"sync"
+)
 
 type Coin struct {
 	PathComponent string `json:"path_component"`
@@ -1324,15 +1328,21 @@ var Coins = map[string]Coin{
 }
 
 var initChainNamesOnce sync.Once
-var activeChains = make(map[string]string)
+var activeChains = make([]map[string]string, 0)
 
-func ActiveChains() map[string]string {
+func ActiveChains() []map[string]string {
 	initChainNamesOnce.Do(func() {
 		for k, v := range Coins {
 			if v.ChainName != "" {
-				activeChains[k] = v.ChainName
+				activeChains = append(activeChains, map[string]string{
+					"coin_type":  k,
+					"chain_name": v.ChainName,
+				})
 			}
 		}
+		sort.Slice(activeChains, func(i, j int) bool {
+			return gconv.Uint64(activeChains[i]["coin_type"]) < gconv.Uint64(activeChains[j]["coin_type"])
+		})
 	})
 	return activeChains
 }

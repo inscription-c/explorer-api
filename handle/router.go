@@ -10,10 +10,10 @@ import (
 
 func (h *Handler) InitRouter() {
 	h.Engine().Use(gin.Recovery())
-	if config.SrvCfg.EnablePProf {
+	if config.SrvCfg.Server.EnablePProf {
 		pprof.Register(h.Engine())
 	}
-	if config.SrvCfg.Prometheus {
+	if config.SrvCfg.Server.Prometheus {
 		p := middlewares.NewPrometheus("gin")
 		p.Use(h.Engine())
 	}
@@ -33,6 +33,6 @@ func (h *Handler) InitRouter() {
 
 	h.Engine().GET("/l2/networks", h.L2Networks)
 	h.Engine().GET("/estimate-smart-fee", h.EstimateSmartFee)
-	//h.Engine().POST("/order/status", h.OrderStatus)
-	//h.Engine().POST("/inscribe/order/create/c-brc20-deploy", h.CreateCbr20DeployOrder)
+	h.Engine().GET("/order/status/:order_id", h.OrderStatus)
+	h.Engine().POST("/inscribe/order/create/c-brc20-deploy", h.CreateCbr20DeployOrder)
 }

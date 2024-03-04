@@ -4,17 +4,18 @@ go 1.21
 
 require (
 	github.com/btcsuite/btcd v0.24.1-0.20240116200649-17fdc5219b36
+	github.com/btcsuite/btcd/btcec/v2 v2.3.2
 	github.com/btcsuite/btcd/btcutil v1.1.5
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
+	github.com/btcsuite/btcwallet v0.16.10-0.20240130014358-d356b543e83c
 	github.com/getsentry/sentry-go v0.27.0
 	github.com/gin-contrib/pprof v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/gogf/gf/v2 v2.6.3
-	github.com/inscription-c/cins v0.0.0-20240229034250-6719d5b2e94f
+	github.com/inscription-c/cins v0.0.0-20240304101007-49d394adeaea
 	github.com/jrick/logrotate v1.0.0
-	github.com/pingcap/tidb v1.1.0-beta.0.20240119131048-6db1d6b79c28
 	github.com/prometheus/client_golang v1.19.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/sirupsen/logrus v1.9.3
@@ -26,8 +27,9 @@ require (
 )
 
 require (
+	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
+	github.com/btcsuite/btcwallet/walletdb v1.4.2-0.20240130014358-d356b543e83c // indirect
 	github.com/btcsuite/go-socks v0.0.0-20170105172521-4720035b7bfd // indirect
 	github.com/btcsuite/websocket v0.0.0-20150119174127-31079b680792 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
@@ -47,9 +49,12 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
+	github.com/lightninglabs/neutrino/cache v1.1.1 // indirect
+	github.com/lightningnetwork/lnd/tlv v1.0.2 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/nareix/joy4 v0.0.0-20200507095837-05a4ffbb5369 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.48.0 // indirect

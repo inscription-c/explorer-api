@@ -1,8 +1,10 @@
 package handle
 
 import (
+	"errors"
 	"github.com/btcsuite/btcd/btcjson"
 	"github.com/gin-gonic/gin"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/inscription-c/explorer-api/constants"
 	"golang.org/x/sync/errgroup"
 	"net/http"
@@ -16,14 +18,17 @@ func (h *Handler) EstimateSmartFee(ctx *gin.Context) {
 }
 
 func (h *Handler) doEstimateSmartFee(ctx *gin.Context) error {
-	result := map[string]uint32{}
+	result := map[string]uint64{}
 	errWg := &errgroup.Group{}
 	errWg.Go(func() error {
 		resp, err := h.RpcClient().EstimateSmartFee(10, &btcjson.EstimateModeConservative)
 		if err != nil {
 			return err
 		}
-		result["fast"] = uint32(*resp.FeeRate * float64(constants.OneBtc))
+		if len(resp.Errors) > 0 {
+			return errors.New(gconv.String(resp.Errors))
+		}
+		result["fast"] = uint64(*resp.FeeRate * float64(constants.OneBtc))
 		return nil
 	})
 	errWg.Go(func() error {
@@ -31,7 +36,10 @@ func (h *Handler) doEstimateSmartFee(ctx *gin.Context) error {
 		if err != nil {
 			return err
 		}
-		result["normal"] = uint32(*resp.FeeRate * float64(constants.OneBtc))
+		if len(resp.Errors) > 0 {
+			return errors.New(gconv.String(resp.Errors))
+		}
+		result["normal"] = uint64(*resp.FeeRate * float64(constants.OneBtc))
 		return nil
 	})
 	errWg.Go(func() error {
@@ -39,7 +47,10 @@ func (h *Handler) doEstimateSmartFee(ctx *gin.Context) error {
 		if err != nil {
 			return err
 		}
-		result["slow"] = uint32(*resp.FeeRate * float64(constants.OneBtc))
+		if len(resp.Errors) > 0 {
+			return errors.New(gconv.String(resp.Errors))
+		}
+		result["slow"] = uint64(*resp.FeeRate * float64(constants.OneBtc))
 		return nil
 	})
 	if err := errWg.Wait(); err != nil {

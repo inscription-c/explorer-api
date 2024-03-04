@@ -12,7 +12,6 @@ import (
 	"time"
 
 	inscLog "github.com/inscription-c/cins/inscription/log"
-	_ "github.com/pingcap/tidb/pkg/extension/_import"
 )
 
 // DB is a struct that embeds gorm.DB to provide additional database functionality.
