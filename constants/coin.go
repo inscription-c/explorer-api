@@ -3,7 +3,6 @@ package constants
 import (
 	"github.com/gogf/gf/v2/util/gconv"
 	"sort"
-	"sync"
 )
 
 type Coin struct {
@@ -1327,25 +1326,25 @@ var Coins = map[string]Coin{
 	"1179993420": {"0xc655454c", "", "Fuel"},
 }
 
-var initChainNamesOnce sync.Once
 var activeChains = make([]map[string]string, 0)
 var activeChainMaps = make(map[string]string)
 
-func ActiveChains() []map[string]string {
-	initChainNamesOnce.Do(func() {
-		for k, v := range Coins {
-			if v.ChainName != "" {
-				activeChains = append(activeChains, map[string]string{
-					"coin_type":  k,
-					"chain_name": v.ChainName,
-				})
-				activeChainMaps[k] = v.ChainName
-			}
+func init() {
+	for k, v := range Coins {
+		if v.ChainName != "" {
+			activeChains = append(activeChains, map[string]string{
+				"coin_type":  k,
+				"chain_name": v.ChainName,
+			})
+			activeChainMaps[k] = v.ChainName
 		}
-		sort.Slice(activeChains, func(i, j int) bool {
-			return gconv.Uint64(activeChains[i]["coin_type"]) < gconv.Uint64(activeChains[j]["coin_type"])
-		})
+	}
+	sort.Slice(activeChains, func(i, j int) bool {
+		return gconv.Uint64(activeChains[i]["coin_type"]) < gconv.Uint64(activeChains[j]["coin_type"])
 	})
+}
+
+func ActiveChains() []map[string]string {
 	return activeChains
 }
 
