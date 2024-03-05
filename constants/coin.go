@@ -1329,6 +1329,7 @@ var Coins = map[string]Coin{
 
 var initChainNamesOnce sync.Once
 var activeChains = make([]map[string]string, 0)
+var activeChainMaps = make(map[string]string)
 
 func ActiveChains() []map[string]string {
 	initChainNamesOnce.Do(func() {
@@ -1338,6 +1339,7 @@ func ActiveChains() []map[string]string {
 					"coin_type":  k,
 					"chain_name": v.ChainName,
 				})
+				activeChainMaps[k] = v.ChainName
 			}
 		}
 		sort.Slice(activeChains, func(i, j int) bool {
@@ -1345,4 +1347,8 @@ func ActiveChains() []map[string]string {
 		})
 	})
 	return activeChains
+}
+
+func ChainName(coinType string) string {
+	return activeChainMaps[coinType]
 }

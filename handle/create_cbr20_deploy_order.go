@@ -11,6 +11,7 @@ import (
 	"github.com/inscription-c/cins/inscription"
 	"github.com/inscription-c/cins/inscription/index/tables"
 	"github.com/inscription-c/cins/pkg/util"
+	constants2 "github.com/inscription-c/explorer-api/constants"
 	tables2 "github.com/inscription-c/explorer-api/tables"
 	"net/http"
 )
@@ -40,6 +41,11 @@ func (h *Handler) CreateCbr20DeployOrder(ctx *gin.Context) {
 }
 
 func (h *Handler) doCreateCbr20DeployOrder(ctx *gin.Context, req *CreateCbr20DeployOrderReq) error {
+	if constants2.ChainName(req.L2NetWork) == "" {
+		ctx.Status(http.StatusBadRequest)
+		return nil
+	}
+
 	priKey, err := btcec.NewPrivateKey()
 	if err != nil {
 		return err
