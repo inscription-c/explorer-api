@@ -126,7 +126,7 @@ func (h *Handler) doInscriptions(ctx *gin.Context, req *InscriptionsReq) error {
 	if req.Search != "" {
 		if constants.InscriptionIdRegexp.MatchString(req.Search) {
 			insId := tables.StringToInscriptionId(req.Search)
-			ins, err := h.DB().GetInscriptionById(insId)
+			ins, err := h.IndexerDB().GetInscriptionById(insId)
 			if err != nil {
 				return err
 			}
@@ -143,7 +143,7 @@ func (h *Handler) doInscriptions(ctx *gin.Context, req *InscriptionsReq) error {
 
 		inscriptionNumber, err := strconv.ParseInt(req.Search, 10, 64)
 		if err == nil {
-			ins, err := h.DB().GetInscriptionByInscriptionNum(inscriptionNumber)
+			ins, err := h.IndexerDB().GetInscriptionByInscriptionNum(inscriptionNumber)
 			if err != nil {
 				return err
 			}
@@ -167,7 +167,7 @@ func (h *Handler) doInscriptions(ctx *gin.Context, req *InscriptionsReq) error {
 		}
 	}
 
-	list, total, err := h.DB().SearchInscriptions(searParams)
+	list, total, err := h.IndexerDB().SearchInscriptions(searParams)
 	if err != nil {
 		return err
 	}

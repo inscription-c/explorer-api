@@ -27,7 +27,7 @@ func (h *Handler) doHomePageStatistics(ctx *gin.Context) error {
 
 	errWg := &errgroup.Group{}
 	errWg.Go(func() error {
-		total, err := h.DB().InscriptionsNum()
+		total, err := h.IndexerDB().InscriptionsNum()
 		if err != nil {
 			return err
 		}
@@ -35,7 +35,7 @@ func (h *Handler) doHomePageStatistics(ctx *gin.Context) error {
 		return nil
 	})
 	errWg.Go(func() error {
-		storedData, err := h.DB().InscriptionsStoredData()
+		storedData, err := h.IndexerDB().InscriptionsStoredData()
 		if err != nil {
 			return err
 		}
@@ -43,7 +43,7 @@ func (h *Handler) doHomePageStatistics(ctx *gin.Context) error {
 		return nil
 	})
 	errWg.Go(func() error {
-		totalFees, err := h.DB().InscriptionsTotalFees()
+		totalFees, err := h.IndexerDB().InscriptionsTotalFees()
 		if err != nil {
 			return err
 		}

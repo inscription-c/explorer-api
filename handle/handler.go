@@ -81,6 +81,11 @@ func (h *Handler) DB() *dao.DB {
 	return h.options.db
 }
 
+// IndexerDB is a method that returns the indexer database from the options of a Handler.
+func (h *Handler) IndexerDB() *dao.DB {
+	return h.options.indexer
+}
+
 // RpcClient is a method that returns the rpcclient from the options of a Handler.
 func (h *Handler) RpcClient() *rpcclient.Client {
 	return h.options.cli

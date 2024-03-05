@@ -15,7 +15,7 @@ func (h *Handler) BlockHeight(ctx *gin.Context) {
 }
 
 func (h *Handler) doBlockHeight(ctx *gin.Context) error {
-	height, err := h.DB().BlockHeight()
+	height, err := h.IndexerDB().BlockHeight()
 	if err != nil {
 		return err
 	}

@@ -38,4 +38,5 @@ func NewBlockParser(opts ...OpFunc) *BlockParser {
 
 func (b *BlockParser) Run() error {
 
+	return nil
 }
