@@ -135,16 +135,18 @@ func (b *Runner) processRevealTx() error {
 		if err := rows.Scan(&order); err != nil {
 			return err
 		}
-		if _, err := b.indexerDB.GetInscriptionById(&tables.InscriptionId{
+		inscriptionId := &tables.InscriptionId{
 			TxId:   order.RevealTxId,
 			Offset: 0,
-		}); err != nil {
+		}
+		if _, err := b.indexerDB.GetInscriptionById(inscriptionId); err != nil {
 			return err
 		}
 		order.Status = tables.OrderStatusSuccess
 		if err := b.db.Save(&order).Error; err != nil {
 			return err
 		}
+		log.Log.Infof("Inscribe Success, order: %s inscriptionId: %s", order.OrderId, inscriptionId)
 	}
 	return nil
 }
@@ -300,13 +302,15 @@ func (b *Runner) signRevealTx(commitTx *wire.MsgTx, order *tables.InscribeOrder,
 	}
 
 	// It signs the signature hash using the private key.
-	scalar := &btcec.ModNScalar{}
-	revealTxPriKeyData, err := hex.DecodeString(order.RevealPriKey)
+	revealTxPriKeyBytes, err := hex.DecodeString(order.RevealPriKey)
 	if err != nil {
 		return nil, err
 	}
-	scalar.SetByteSlice(revealTxPriKeyData)
-	signature, err := schnorr.Sign(btcec.PrivKeyFromScalar(scalar), signHash)
+	priKey, _ := btcec.PrivKeyFromBytes(revealTxPriKeyBytes)
+	if err != nil {
+		return nil, err
+	}
+	signature, err := schnorr.Sign(priKey, signHash)
 	if err != nil {
 		return nil, err
 	}
