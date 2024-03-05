@@ -9,7 +9,6 @@ import (
 type OrderStatusResp struct {
 	Status        tables.OrderStatus   `json:"status"`
 	InscriptionId tables.InscriptionId `json:"inscription_id"`
-	CreatedAt     int64                `json:"created_at"`
 }
 
 func (h *Handler) OrderStatus(ctx *gin.Context) {
@@ -37,7 +36,6 @@ func (h *Handler) doOrderStatus(ctx *gin.Context, orderId string) error {
 	resp := &OrderStatusResp{
 		Status:        order.Status,
 		InscriptionId: order.InscriptionId,
-		CreatedAt:     order.CreatedAt.Unix(),
 	}
 	ctx.JSON(http.StatusOK, resp)
 	return nil

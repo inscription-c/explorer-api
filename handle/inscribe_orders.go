@@ -17,8 +17,8 @@ type InscribeOrderResp struct {
 	OrderId        string `json:"order_id"`
 	InscriptionId  string `json:"inscription_id"`
 	ReceiveAddress string `json:"receive_address"`
-	CommitTxId     string `json:"commit_tx_address"`
-	RevealTxId     string `json:"reveal_tx_address"`
+	CommitTxId     string `json:"commit_tx_id"`
+	RevealTxId     string `json:"reveal_tx_id"`
 	RevealTxValue  int64  `json:"reveal_tx_value"`
 	Status         int    `json:"status"`
 	CreatedAt      int64  `json:"created_at"`
