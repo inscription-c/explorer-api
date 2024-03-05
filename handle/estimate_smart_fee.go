@@ -6,13 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/inscription-c/explorer-api/constants"
+	"github.com/inscription-c/explorer-api/handle/api_code"
 	"golang.org/x/sync/errgroup"
 	"net/http"
 )
 
 func (h *Handler) EstimateSmartFee(ctx *gin.Context) {
 	if err := h.doEstimateSmartFee(ctx); err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/inscription-c/cins/inscription/index/tables"
 	"github.com/inscription-c/cins/pkg/util"
 	constants2 "github.com/inscription-c/explorer-api/constants"
+	"github.com/inscription-c/explorer-api/handle/api_code"
 	tables2 "github.com/inscription-c/explorer-api/tables"
 	"net/http"
 )
@@ -30,22 +31,20 @@ type CreateCbr20DeployOrderReq struct {
 func (h *Handler) CreateCbr20DeployOrder(ctx *gin.Context) {
 	req := &CreateCbr20DeployOrderReq{}
 	if err := ctx.ShouldBindJSON(req); err != nil {
-		ctx.String(http.StatusBadRequest, err.Error())
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, err.Error()))
 		return
-
+	}
+	if constants2.ChainName(req.L2NetWork) == "" {
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, "invalid l2_network"))
+		return
 	}
 	if err := h.doCreateCbr20DeployOrder(ctx, req); err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }
 
 func (h *Handler) doCreateCbr20DeployOrder(ctx *gin.Context, req *CreateCbr20DeployOrderReq) error {
-	if constants2.ChainName(req.L2NetWork) == "" {
-		ctx.Status(http.StatusBadRequest)
-		return nil
-	}
-
 	priKey, err := btcec.NewPrivateKey()
 	if err != nil {
 		return err

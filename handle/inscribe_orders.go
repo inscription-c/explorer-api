@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/inscription-c/cins/pkg/util"
+	"github.com/inscription-c/explorer-api/handle/api_code"
 	"net/http"
 )
 
@@ -27,7 +28,7 @@ type InscribeOrderResp struct {
 func (h *Handler) InscribeOrders(ctx *gin.Context) {
 	receiveAddress := ctx.Param("receive_address")
 	if receiveAddress == "" {
-		ctx.String(http.StatusBadRequest, "receive_address is required")
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, "receive_address is required"))
 		return
 	}
 	page := ctx.Param("page")
@@ -35,15 +36,15 @@ func (h *Handler) InscribeOrders(ctx *gin.Context) {
 		page = "1"
 	}
 	if gconv.Int(page) <= 0 {
-		ctx.String(http.StatusBadRequest, "page is invalid")
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, "page is invalid"))
 		return
 	}
 	if _, err := btcutil.DecodeAddress(receiveAddress, util.ActiveNet.Params); err != nil {
-		ctx.String(http.StatusBadRequest, "receive_address is invalid")
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, "receive_address is invalid"))
 		return
 	}
 	if err := h.doInscribeOrders(ctx, receiveAddress, gconv.Int(page)); err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/inscription-c/explorer-api/constants"
+	"github.com/inscription-c/explorer-api/handle/api_code"
 	"github.com/shopspring/decimal"
 	"golang.org/x/sync/errgroup"
 	"net/http"
@@ -17,7 +18,7 @@ type HomePageStatisticsResp struct {
 
 func (h *Handler) HomePageStatistics(ctx *gin.Context) {
 	if err := h.doHomePageStatistics(ctx); err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }

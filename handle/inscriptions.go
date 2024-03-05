@@ -6,6 +6,7 @@ import (
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/inscription-c/explorer-api/constants"
 	"github.com/inscription-c/explorer-api/dao"
+	"github.com/inscription-c/explorer-api/handle/api_code"
 	"github.com/inscription-c/explorer-api/model"
 	"github.com/inscription-c/explorer-api/tables"
 	"net/http"
@@ -79,15 +80,15 @@ type CInsDescription struct {
 func (h *Handler) Inscriptions(ctx *gin.Context) {
 	req := &InscriptionsReq{}
 	if err := ctx.BindJSON(req); err != nil {
-		ctx.String(http.StatusBadRequest, err.Error())
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, err.Error()))
 		return
 	}
 	if err := req.Check(); err != nil {
-		ctx.String(http.StatusBadRequest, err.Error())
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, err.Error()))
 		return
 	}
 	if err := h.doInscriptions(ctx, req); err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }
