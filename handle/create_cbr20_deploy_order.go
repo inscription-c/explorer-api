@@ -17,7 +17,7 @@ import (
 
 type CreateCbr20DeployOrderReq struct {
 	Postage        int64  `json:"postage" binding:"min=330,max=10000"`
-	FeatRate       int64  `json:"fee_rate" binding:"required"`
+	FeatRate       int64  `json:"fee_rate" binding:"gt=0"`
 	Ticker         string `json:"ticker" binding:"required"`
 	TotalSupply    string `json:"total_supply" binding:"required"`
 	LimitPerMint   string `json:"limit_per_mint" binding:"required"`

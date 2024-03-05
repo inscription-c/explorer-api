@@ -6,6 +6,7 @@ chain:
   url: "http://127.0.0.1:18334"
   username: "root"
   password: "root"
+  current_block_number: 100000
 db:
   mysql:
     addr: "127.0.0.1:3306"

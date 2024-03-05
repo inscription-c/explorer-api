@@ -25,7 +25,7 @@ const (
 	SearchTypeTicker            SearchType = "ticker"
 )
 
-type ScanInscriptionsReq struct {
+type InscriptionsReq struct {
 	Search          string   `json:"search"`
 	Page            int      `json:"page" binding:"omitempty,min=1"`
 	Limit           int      `json:"limit" binding:"omitempty,min=1,max=50"`
@@ -35,7 +35,7 @@ type ScanInscriptionsReq struct {
 	Charms          []string `json:"charms" binding:"omitempty,dive,oneof=cursed"`
 }
 
-func (req *ScanInscriptionsReq) Check() error {
+func (req *InscriptionsReq) Check() error {
 	if req.Page == 0 {
 		req.Page = 1
 	}
@@ -48,14 +48,14 @@ func (req *ScanInscriptionsReq) Check() error {
 	return nil
 }
 
-type ScanInscriptionsResp struct {
-	SearchType SearchType              `json:"search_type"`
-	Page       int                     `json:"page"`
-	Total      int                     `json:"total"`
-	List       []*ScanInscriptionEntry `json:"list"`
+type InscriptionsResp struct {
+	SearchType SearchType          `json:"search_type"`
+	Page       int                 `json:"page"`
+	Total      int                 `json:"total"`
+	List       []*InscriptionEntry `json:"list"`
 }
 
-type ScanInscriptionEntry struct {
+type InscriptionEntry struct {
 	InscriptionId     string          `json:"inscription_id"`
 	InscriptionNumber int64           `json:"inscription_number"`
 	ContentType       string          `json:"content_type"`
@@ -76,8 +76,8 @@ type CInsDescription struct {
 	Contract  string `json:"contract"`
 }
 
-func (h *Handler) ScanInscriptions(ctx *gin.Context) {
-	req := &ScanInscriptionsReq{}
+func (h *Handler) Inscriptions(ctx *gin.Context) {
+	req := &InscriptionsReq{}
 	if err := ctx.BindJSON(req); err != nil {
 		ctx.String(http.StatusBadRequest, err.Error())
 		return
@@ -86,13 +86,13 @@ func (h *Handler) ScanInscriptions(ctx *gin.Context) {
 		ctx.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := h.doScanInscriptions(ctx, req); err != nil {
+	if err := h.doInscriptions(ctx, req); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 }
 
-func (h *Handler) doScanInscriptions(ctx *gin.Context, req *ScanInscriptionsReq) error {
+func (h *Handler) doInscriptions(ctx *gin.Context, req *InscriptionsReq) error {
 	mediaTypes := make([]string, 0)
 	contentTypes := make([]string, 0)
 	for _, v := range req.Types {
@@ -103,10 +103,10 @@ func (h *Handler) doScanInscriptions(ctx *gin.Context, req *ScanInscriptionsReq)
 		mediaTypes = append(mediaTypes, v)
 	}
 
-	resp := &ScanInscriptionsResp{
+	resp := &InscriptionsResp{
 		SearchType: SearchTypeUnknown,
 		Page:       req.Page,
-		List:       make([]*ScanInscriptionEntry, 0),
+		List:       make([]*InscriptionEntry, 0),
 	}
 
 	searParams := &dao.FindProtocolsParams{
@@ -186,8 +186,8 @@ func (h *Handler) doScanInscriptions(ctx *gin.Context, req *ScanInscriptionsReq)
 	return nil
 }
 
-func insToScanEntry(ins *tables.Inscriptions) *ScanInscriptionEntry {
-	return &ScanInscriptionEntry{
+func insToScanEntry(ins *tables.Inscriptions) *InscriptionEntry {
+	return &InscriptionEntry{
 		InscriptionId:     ins.InscriptionId.String(),
 		InscriptionNumber: ins.InscriptionNum,
 		ContentType:       ins.ContentType,

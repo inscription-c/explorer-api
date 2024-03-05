@@ -26,7 +26,7 @@ func (h *Handler) InitRouter() {
 	}
 	h.Engine().Use(middlewares.Logger())
 	h.Engine().GET("/home/page/statistics", h.HomePageStatistics)
-	h.Engine().POST("/inscriptions", h.ScanInscriptions)
+	h.Engine().POST("/inscriptions", h.Inscriptions)
 
 	r := h.Engine().Group("/r")
 	r.GET("/blockheight", h.BlockHeight)
@@ -34,5 +34,6 @@ func (h *Handler) InitRouter() {
 	h.Engine().GET("/l2/networks", h.L2Networks)
 	h.Engine().GET("/estimate-smart-fee", h.EstimateSmartFee)
 	h.Engine().GET("/order/status/:order_id", h.OrderStatus)
+	h.Engine().GET("/inscribe/orders/:receive_address/:page", h.InscribeOrders)
 	h.Engine().POST("/inscribe/order/create/c-brc20-deploy", h.CreateCbr20DeployOrder)
 }
