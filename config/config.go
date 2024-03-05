@@ -14,10 +14,10 @@ type Config struct {
 		RpcListen string `yaml:"rpc_listen"`
 	} `yaml:"server"`
 	Chain struct {
-		Url                string `yaml:"url"`
-		Username           string `yaml:"username"`
-		Password           string `yaml:"password"`
-		CurrentBlockNumber uint64 `yaml:"current_block_number"`
+		Url         string `yaml:"url"`
+		Username    string `yaml:"username"`
+		Password    string `yaml:"password"`
+		StartHeight uint32 `yaml:"start_height"`
 	} `yaml:"chain"`
 	DB struct {
 		Mysql   Mysql `yaml:"mysql"`

@@ -8,6 +8,7 @@ import (
 	"github.com/inscription-c/cins/btcd/rpcclient"
 	"github.com/inscription-c/cins/inscription/log"
 	"github.com/inscription-c/explorer-api/dao"
+	"github.com/inscription-c/explorer-api/dao/indexer"
 	"net/http"
 	"os"
 )
@@ -18,7 +19,7 @@ type Options struct {
 	testnet bool
 	engin   *gin.Engine
 	db      *dao.DB
-	indexer *dao.DB
+	indexer *indexer.DB
 	cli     *rpcclient.Client
 }
 
@@ -49,7 +50,7 @@ func WithDB(db *dao.DB) func(*Options) {
 	}
 }
 
-func WithIndexerDB(db *dao.DB) func(*Options) {
+func WithIndexerDB(db *indexer.DB) func(*Options) {
 	return func(options *Options) {
 		options.indexer = db
 	}
@@ -82,7 +83,7 @@ func (h *Handler) DB() *dao.DB {
 }
 
 // IndexerDB is a method that returns the indexer database from the options of a Handler.
-func (h *Handler) IndexerDB() *dao.DB {
+func (h *Handler) IndexerDB() *indexer.DB {
 	return h.options.indexer
 }
 

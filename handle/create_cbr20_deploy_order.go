@@ -125,7 +125,6 @@ func (h *Handler) doCreateCbr20DeployOrder(ctx *gin.Context, req *CreateCbr20Dep
 	order := &tables2.InscribeOrder{
 		RevealAddress:  taprootAddress.String(),
 		RevealPriKey:   priKey.Key.String(),
-		RevealTxId:     revealTx.TxHash().String(),
 		RevealTxRaw:    hex.EncodeToString(revealTxRaw.Bytes()),
 		RevealTxValue:  revealTxValue,
 		ReceiveAddress: req.ReceiveAddress,

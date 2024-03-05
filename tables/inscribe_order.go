@@ -9,9 +9,11 @@ import (
 type OrderStatus int
 
 const (
-	OrderStatusFail    OrderStatus = -1
-	OrderStatusDefault OrderStatus = 0
-	OrderStatusSuccess OrderStatus = 1
+	OrderStatusFeeNotEnough OrderStatus = -2
+	OrderStatusFail         OrderStatus = -1
+	OrderStatusDefault      OrderStatus = 0
+	OrderStatusRevealSend   OrderStatus = 1
+	OrderStatusSuccess      OrderStatus = 2
 )
 
 type InscribeOrder struct {

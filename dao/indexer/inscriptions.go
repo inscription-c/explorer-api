@@ -1,4 +1,4 @@
-package dao
+package indexer
 
 import (
 	"errors"

@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/inscription-c/explorer-api/constants"
-	"github.com/inscription-c/explorer-api/dao"
+	"github.com/inscription-c/explorer-api/dao/indexer"
 	"github.com/inscription-c/explorer-api/handle/api_code"
 	"github.com/inscription-c/explorer-api/model"
 	"github.com/inscription-c/explorer-api/tables"
@@ -110,7 +110,7 @@ func (h *Handler) doInscriptions(ctx *gin.Context, req *InscriptionsReq) error {
 		List:       make([]*InscriptionEntry, 0),
 	}
 
-	searParams := &dao.FindProtocolsParams{
+	searParams := &indexer.FindProtocolsParams{
 		Page:            req.Page,
 		Limit:           req.Limit,
 		Order:           req.Order,

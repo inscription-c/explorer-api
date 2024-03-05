@@ -5,11 +5,14 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcwallet/netparams"
 	"github.com/inscription-c/cins/btcd/rpcclient"
+	"github.com/inscription-c/cins/pkg/signal"
 	"github.com/inscription-c/cins/pkg/util"
 	"github.com/inscription-c/explorer-api/config"
 	"github.com/inscription-c/explorer-api/dao"
+	"github.com/inscription-c/explorer-api/dao/indexer"
 	"github.com/inscription-c/explorer-api/handle"
 	"github.com/inscription-c/explorer-api/log"
+	"github.com/inscription-c/explorer-api/runner"
 	"github.com/inscription-c/explorer-api/tables"
 	"github.com/spf13/cobra"
 	"os"
@@ -62,11 +65,11 @@ func ExplorerApi() error {
 		return err
 	}
 
-	indexerDB, err := dao.NewDB(
-		dao.WithAddr(config.Cfg.DB.Indexer.Addr),
-		dao.WithUser(config.Cfg.DB.Indexer.User),
-		dao.WithPassword(config.Cfg.DB.Indexer.Password),
-		dao.WithDBName(config.Cfg.DB.Indexer.DB),
+	indexerDB, err := indexer.NewDB(
+		indexer.WithAddr(config.Cfg.DB.Indexer.Addr),
+		indexer.WithUser(config.Cfg.DB.Indexer.User),
+		indexer.WithPassword(config.Cfg.DB.Indexer.Password),
+		indexer.WithDBName(config.Cfg.DB.Indexer.DB),
 	)
 	if err != nil {
 		return err
@@ -81,6 +84,19 @@ func ExplorerApi() error {
 		return err
 	}
 
+	// runner
+	blockRunner := runner.NewRunner(
+		runner.WithClient(cli),
+		runner.WithDB(db),
+		runner.WithIndexerDB(indexerDB),
+		runner.WithStartHeight(config.Cfg.Chain.StartHeight),
+	)
+	blockRunner.Start()
+	signal.AddInterruptHandler(func() {
+		_ = blockRunner.Wait()
+	})
+
+	// http handler
 	handler, err := handle.New(
 		handle.WithAddr(config.Cfg.Server.RpcListen),
 		handle.WithTestNet(config.Cfg.Server.Testnet),
