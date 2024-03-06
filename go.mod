@@ -14,7 +14,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/gogf/gf/v2 v2.6.3
-	github.com/inscription-c/cins v0.0.0-20240305042504-9bcb1cfe03bd
+	github.com/inscription-c/cins v0.0.0-20240306083438-057825717cef
 	github.com/jrick/logrotate v1.0.0
 	github.com/prometheus/client_golang v1.19.0
 	github.com/shopspring/decimal v1.3.1
