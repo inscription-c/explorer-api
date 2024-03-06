@@ -88,7 +88,7 @@ func (h *Handler) Inscriptions(ctx *gin.Context) {
 		return
 	}
 	if err := h.doInscriptions(ctx, req); err != nil {
-		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
+		ctx.JSON(http.StatusInternalServerError, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }

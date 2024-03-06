@@ -10,7 +10,7 @@ import (
 // BlockHeight return latest block height
 func (h *Handler) BlockHeight(ctx *gin.Context) {
 	if err := h.doBlockHeight(ctx); err != nil {
-		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
+		ctx.JSON(http.StatusInternalServerError, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }

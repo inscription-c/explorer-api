@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/hex"
 	"github.com/btcsuite/btcd/btcec/v2"
+	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,7 @@ import (
 	"github.com/inscription-c/explorer-api/handle/api_code"
 	tables2 "github.com/inscription-c/explorer-api/tables"
 	"net/http"
+	"strconv"
 )
 
 type CreateCbr20DeployOrderReq struct {
@@ -28,18 +30,44 @@ type CreateCbr20DeployOrderReq struct {
 	ReceiveAddress string `json:"receive_address" binding:"required"`
 }
 
+func (req *CreateCbr20DeployOrderReq) Check() error {
+	invalidParams := api_code.NewResponse(api_code.InvalidParams, "")
+	if !constants2.TickNameRegexp.MatchString(req.Ticker) {
+		invalidParams.Message = "invalid ticker"
+		return invalidParams
+	}
+	if _, err := strconv.ParseUint(req.TotalSupply, 10, 64); err != nil {
+		invalidParams.Message = "invalid total_supply"
+		return invalidParams
+	}
+	if _, err := strconv.ParseUint(req.LimitPerMint, 10, 64); err != nil {
+		invalidParams.Message = "invalid limit_per_mint"
+		return invalidParams
+	}
+	if constants2.ChainName(req.L2NetWork) == "" {
+		invalidParams.Message = "invalid l2_network"
+		return invalidParams
+	}
+	if _, err := btcutil.DecodeAddress(req.ReceiveAddress, util.ActiveNet.Params); err != nil {
+		invalidParams.Message = "invalid receive_address"
+		return invalidParams
+	}
+	return nil
+}
+
 func (h *Handler) CreateCbr20DeployOrder(ctx *gin.Context) {
 	req := &CreateCbr20DeployOrderReq{}
 	if err := ctx.ShouldBindJSON(req); err != nil {
 		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, err.Error()))
 		return
 	}
-	if constants2.ChainName(req.L2NetWork) == "" {
-		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InvalidParams, "invalid l2_network"))
+	if err := req.Check(); err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
+
 	if err := h.doCreateCbr20DeployOrder(ctx, req); err != nil {
-		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
+		ctx.JSON(http.StatusInternalServerError, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }

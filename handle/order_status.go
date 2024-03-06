@@ -19,7 +19,7 @@ func (h *Handler) OrderStatus(ctx *gin.Context) {
 		return
 	}
 	if err := h.doOrderStatus(ctx, orderId); err != nil {
-		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
+		ctx.JSON(http.StatusInternalServerError, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }

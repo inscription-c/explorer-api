@@ -13,7 +13,7 @@ import (
 
 func (h *Handler) EstimateSmartFee(ctx *gin.Context) {
 	if err := h.doEstimateSmartFee(ctx); err != nil {
-		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
+		ctx.JSON(http.StatusInternalServerError, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }

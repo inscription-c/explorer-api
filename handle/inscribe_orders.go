@@ -44,7 +44,7 @@ func (h *Handler) InscribeOrders(ctx *gin.Context) {
 		return
 	}
 	if err := h.doInscribeOrders(ctx, receiveAddress, gconv.Int(page)); err != nil {
-		ctx.JSON(http.StatusBadRequest, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
+		ctx.JSON(http.StatusInternalServerError, api_code.NewResponse(api_code.InternalServerErr, err.Error()))
 		return
 	}
 }
