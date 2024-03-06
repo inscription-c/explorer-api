@@ -283,6 +283,7 @@ func (b *Runner) signRevealTx(commitTx *wire.MsgTx, order *tables.InscribeOrder,
 	}
 	commitTxHash := commitTx.TxHash()
 	revealTx.TxIn[0].PreviousOutPoint = *wire.NewOutPoint(&commitTxHash, uint32(idx))
+	revealTx.TxIn[0].SignatureScript = nil
 
 	// It creates a new MultiPrevOutFetcher to fetch previous outputs.
 	prevFetcher := txscript.NewMultiPrevOutFetcher(map[wire.OutPoint]*wire.TxOut{
