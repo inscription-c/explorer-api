@@ -4,22 +4,22 @@ import (
 	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
-	"github.com/inscription-c/cins/inscription/server/config"
+	"github.com/inscription-c/explorer-api/config"
 	"github.com/inscription-c/explorer-api/handle/middlewares"
 )
 
 func (h *Handler) InitRouter() {
 	h.Engine().Use(gin.Recovery())
-	if config.SrvCfg.Server.EnablePProf {
+	if config.Cfg.Server.EnablePProf {
 		pprof.Register(h.Engine())
 	}
-	if config.SrvCfg.Server.Prometheus {
+	if config.Cfg.Server.Prometheus {
 		p := middlewares.NewPrometheus("gin")
 		p.Use(h.Engine())
 	}
 
-	h.Engine().Use(middlewares.Cors(config.SrvCfg.Origins...))
-	if config.SrvCfg.Sentry.Dsn != "" {
+	h.Engine().Use(middlewares.Cors(config.Cfg.Origins...))
+	if config.Cfg.Sentry.Dsn != "" {
 		h.Engine().Use(sentrygin.New(sentrygin.Options{
 			Repanic: true,
 		}))

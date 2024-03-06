@@ -9,9 +9,11 @@ var Cfg = &Config{}
 
 type Config struct {
 	Server struct {
-		Name      string `yaml:"name"`
-		Testnet   bool   `yaml:"testnet"`
-		RpcListen string `yaml:"rpc_listen"`
+		Name        string `yaml:"name"`
+		Testnet     bool   `yaml:"testnet"`
+		RpcListen   string `yaml:"rpc_listen"`
+		EnablePProf bool   `yaml:"pprof"`
+		Prometheus  bool   `yaml:"prometheus"`
 	} `yaml:"server"`
 	Chain struct {
 		Url         string `yaml:"url"`
@@ -23,6 +25,11 @@ type Config struct {
 		Mysql   Mysql `yaml:"mysql"`
 		Indexer Mysql `yaml:"indexer"`
 	} `yaml:"db"`
+	Sentry struct {
+		Dsn              string  `yaml:"dsn"`
+		TracesSampleRate float64 `yaml:"traces_sample_rate"`
+	} `yaml:"sentry"`
+	Origins []string `yaml:"origins"`
 }
 
 type Mysql struct {
