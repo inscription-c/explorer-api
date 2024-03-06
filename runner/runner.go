@@ -132,16 +132,21 @@ func (b *Runner) processRevealTx() error {
 
 	for rows.Next() {
 		var order tables.InscribeOrder
-		if err := rows.Scan(&order); err != nil {
+		if err := b.db.ScanRows(rows, &order); err != nil {
 			return err
 		}
 		inscriptionId := &tables.InscriptionId{
 			TxId:   order.RevealTxId,
 			Offset: 0,
 		}
-		if _, err := b.indexerDB.GetInscriptionById(inscriptionId); err != nil {
+		inscription, err := b.indexerDB.GetInscriptionById(inscriptionId)
+		if err != nil {
 			return err
 		}
+		if inscription.Id == 0 {
+			continue
+		}
+
 		order.Status = tables.OrderStatusSuccess
 		if err := b.db.Save(&order).Error; err != nil {
 			return err
