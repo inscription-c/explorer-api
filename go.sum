@@ -130,8 +130,7 @@ github.com/grokify/html-strip-tags-go v0.0.1/go.mod h1:2Su6romC5/1VXOQMaWL2yb618
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
-github.com/inscription-c/cins v0.0.0-20240305042504-9bcb1cfe03bd h1:H3DmbpGOdOLb7VsrSW3mSG3kH9f9b+yCi8xxJg7yPLM=
-github.com/inscription-c/cins v0.0.0-20240305042504-9bcb1cfe03bd/go.mod h1:Rh/O3d1p/QdUVgbCkOhYu0HhGy/A7gKk0qV15d2tNCc=
+github.com/inscription-c/cins v0.0.0-20240306083438-057825717cef h1:kTq4STdnDGNg2A5gDlqd/JnlNmkjjki9CgZB4h+Myco=
 github.com/inscription-c/cins v0.0.0-20240306083438-057825717cef/go.mod h1:Rh/O3d1p/QdUVgbCkOhYu0HhGy/A7gKk0qV15d2tNCc=
 github.com/jessevdk/go-flags v0.0.0-20141203071132-1679536dcc89/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
