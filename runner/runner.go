@@ -148,6 +148,7 @@ func (b *Runner) processRevealTx() error {
 		}
 
 		order.Status = tables.OrderStatusSuccess
+		order.InscriptionId = *inscriptionId
 		if err := b.db.Save(&order).Error; err != nil {
 			return err
 		}
@@ -233,6 +234,7 @@ func (b *Runner) indexBlock() error {
 							if inscription.Id > 0 {
 								log.Log.Warn("InscriptionIdExists", order.OrderId, inscription.Id)
 								order.Status = tables.OrderStatusSuccess
+								order.InscriptionId = inscription.InscriptionId
 							} else {
 								if _, err := b.client.SendRawTransaction(revealTx, false); err != nil {
 									log.Log.Error("RevealTxSendError", err, order.OrderId, order.Status)
