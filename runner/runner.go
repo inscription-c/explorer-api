@@ -224,20 +224,30 @@ func (b *Runner) indexBlock() error {
 							if err != nil {
 								return err
 							}
-							revealTxHash, err := b.client.SendRawTransaction(revealTx, false)
+
+							revealTxId := revealTx.TxHash().String()
+							inscription, err := b.indexerDB.GetInscriptionById(tables.NewInscriptionId(revealTxId, 0))
 							if err != nil {
-								log.Log.Error("RevealTxSendError", err, order.OrderId, order.Status)
 								return err
 							}
-							log.Log.Infof("RevealTxSendSuccess %s %s %d", order.OrderId, revealTxHash.String(), order.Status)
+							if inscription.Id > 0 {
+								log.Log.Warn("InscriptionIdExists", order.OrderId, inscription.Id)
+								order.Status = tables.OrderStatusSuccess
+							} else {
+								if _, err := b.client.SendRawTransaction(revealTx, false); err != nil {
+									log.Log.Error("RevealTxSendError", err, order.OrderId, order.Status)
+									return err
+								}
+								log.Log.Infof("RevealTxSendSuccess %s %s %d", order.OrderId, revealTxId, order.Status)
+								order.Status = tables.OrderStatusRevealSend
+							}
 
 							revealTxBuf := bytes.NewBufferString("")
 							if err := revealTx.Serialize(revealTxBuf); err != nil {
 								return err
 							}
-							order.RevealTxId = revealTxHash.String()
+							order.RevealTxId = revealTxId
 							order.RevealTxRaw = hex.EncodeToString(revealTxBuf.Bytes())
-							order.Status = tables.OrderStatusRevealSend
 						}
 						if err := wtx.UpdateInscribeOrderStatus(b.height, &order); err != nil {
 							return err
