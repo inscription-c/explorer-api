@@ -212,7 +212,7 @@ func (b *Runner) indexBlock() error {
 						if err != nil {
 							return err
 						}
-						if order.Id == 0 {
+						if order.Id == 0 || order.Status != tables.OrderStatusDefault {
 							continue
 						}
 
