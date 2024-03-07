@@ -85,7 +85,6 @@ func (h *Handler) doCreateCbr20DeployOrder(ctx *gin.Context, req *CreateCbr20Dep
 		Tick:      req.Ticker,
 		Max:       req.TotalSupply,
 		Limit:     req.LimitPerMint,
-		Decimals:  constants.DecimalsDefault,
 	}
 
 	revealScript, err := inscription.InscriptionToScript(
