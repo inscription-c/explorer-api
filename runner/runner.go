@@ -226,6 +226,7 @@ func (b *Runner) indexBlock() error {
 							}
 							revealTxHash, err := b.client.SendRawTransaction(revealTx, false)
 							if err != nil {
+								log.Log.Error("RevealTxSendError", err, order.OrderId, order.Status)
 								return err
 							}
 							log.Log.Infof("RevealTxSendSuccess %s %s %d", order.OrderId, revealTxHash.String(), order.Status)
