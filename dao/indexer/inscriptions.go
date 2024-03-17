@@ -1,6 +1,7 @@
 package indexer
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/inscription-c/explorer-api/constants"
 	"github.com/inscription-c/explorer-api/model"
@@ -144,17 +145,25 @@ func (d *DB) InscriptionsNum() (total int64, err error) {
 }
 
 func (d *DB) InscriptionsStoredData() (total uint64, err error) {
-	err = d.Model(&tables.Inscriptions{}).Select("sum(content_size)").Scan(&total).Error
+	var totalNull *sql.NullInt64
+	err = d.Model(&tables.Inscriptions{}).Select("sum(content_size)").Scan(&totalNull).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
+	}
+	if totalNull != nil {
+		total = uint64(totalNull.Int64)
 	}
 	return
 }
 
 func (d *DB) InscriptionsTotalFees() (total uint64, err error) {
-	err = d.Model(&tables.Inscriptions{}).Select("sum(fee)").Scan(&total).Error
+	var totalNull *sql.NullInt64
+	err = d.Model(&tables.Inscriptions{}).Select("sum(fee)").Scan(&totalNull).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
+	}
+	if totalNull != nil {
+		total = uint64(totalNull.Int64)
 	}
 	return
 }
